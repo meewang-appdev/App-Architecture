@@ -1,0 +1,47 @@
+아키텍처 구조도
+
+1. 클린 아키텍처 / 유저케이스 구조도 (https://mermaid.live)
+이 두 구조는 비즈니스 로직을 담당하는 계층의 이름(UseCase 또는 Service)만 다를 뿐, 계층을 분리하여 책임을 명확히 한다는 점에서 사실상 동일한 철학을 공유합니다.
+
+graph TD
+    subgraph "Presentation Layer"
+        A[View: MainActivity] -- "사용자 이벤트 전달" --> B(ViewModel: UserViewModel);
+    end
+
+    subgraph "Domain Layer"
+        B -- "실행 요청" --> C("UseCase / Service\n(비즈니스 로직)");
+        C -- "데이터 요청" --> D[Repository Interface];
+    end
+
+    subgraph "Data Layer"
+        E[Repository Implementation] -.->|구현| D;
+        E -- "데이터 가져옴" --> F((DataSource: ApiService));
+    end
+
+    style A fill:#7e57c2,stroke:#d1c4e9,stroke-width:2px,color:#ffffff
+    style B fill:#5c6bc0,stroke:#c5cae9,stroke-width:2px,color:#ffffff
+    style C fill:#43a047,stroke:#c8e6c9,stroke-width:2px,color:#ffffff
+    style D fill:#039be5,stroke:#b3e5fc,stroke-width:2px,color:#ffffff
+    style E fill:#d81b60,stroke:#f8bbd0,stroke-width:2px,color:#ffffff
+    style F fill:#e53935,stroke:#ffcdd2,stroke-width:2px,color:#ffffff
+
+
+
+2. 레파지토리 / 표준 MVVM 구조도 (https://mermaid.live)
+이 구조는 UseCase 계층을 생략하고, Repository가 비즈니스 로직까지 처리하여 구조를 단순화한 실용적인 패턴입니다.
+
+graph TD
+   subgraph "Presentation Layer (View & ViewModel)"
+       A[View: MainActivity] -- "사용자 이벤트 전달" --> B(ViewModel: UserViewModel);
+   end
+
+   subgraph "Model Layer (Repository & Data Source)"
+       B -- "데이터/로직 요청" --> C("Repository\n(데이터 로직 + 비즈니스 로직)");
+       C -- "데이터 가져옴" --> D((DataSource: ApiService));
+   end
+
+   style A fill:#7e57c2,stroke:#d1c4e9,stroke-width:2px,color:#ffffff
+   style B fill:#5c6bc0,stroke:#c5cae9,stroke-width:2px,color:#ffffff
+   style C fill:#d81b60,stroke:#f8bbd0,stroke-width:2px,color:#ffffff
+   style D fill:#e53935,stroke:#ffcdd2,stroke-width:2px,color:#ffffff
+
